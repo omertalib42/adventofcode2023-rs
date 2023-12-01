@@ -1,23 +1,39 @@
-fn fetch_and_add_number(line: &str) -> i32 {
-    let mut nums: Vec<i32> = Vec::new();
-    line.chars().for_each(|c| {
-        if c.is_digit(10) {
-            nums.push(c.to_digit(10).unwrap() as i32);
+use regex::Regex;
+use std::collections::HashMap;
+
+fn main() {
+    let binding = std::fs::read_to_string("day2/day2_input.txt").unwrap();
+    let games = binding.split('\n').collect::<Vec<&str>>();
+
+    let max_fetch: HashMap<&str, u32> = HashMap::from([("red", 12), ("green", 13), ("blue", 14)]);
+
+    let mut ans = 0;
+
+    games.iter().enumerate().for_each(|(i, game)| {
+        let mut flag = true;
+        for round in game.split(';') {
+            for color in round.split(',') {
+                let color = color.trim();
+
+                let re = Regex::new(r"(\d+)\s(\w+)").unwrap();
+                let caps = re.captures(color).unwrap();
+                let count = caps.get(1).unwrap().as_str().parse::<u32>().unwrap();
+                let color = caps.get(2).unwrap().as_str();
+
+                if count > max_fetch[color] {
+                    flag = false;
+                    break;
+                }
+            }
+            if !flag {
+                break;
+            }
+        }
+        if flag {
+            println!("{} is valid", i);
+            ans += i + 1;
         }
     });
 
-    return nums.first().unwrap() * 10 + nums.last().unwrap();
-}
-
-fn main() {
-    let mut ans = 0;
-    std::fs::read_to_string("day1/input1.txt")
-        .unwrap()
-        .lines()
-        .for_each(|line| {
-            ans += fetch_and_add_number(line);
-            // println!("{ans}\n");
-        });
-
-    println!("Answer: {}", ans);
+    println!("{}", ans);
 }

@@ -1,8 +1,8 @@
-fn fetch_and_add_number(line: &str) -> i32 {
-    let mut nums: Vec<i32> = Vec::new();
+fn fetch_and_add_number(line: &str) -> u32 {
+    let mut nums: Vec<u32> = Vec::new();
     line.chars().for_each(|c| {
         if c.is_digit(10) {
-            nums.push(c.to_digit(10).unwrap() as i32);
+            nums.push(c.to_digit(10).unwrap());
         }
     });
 
