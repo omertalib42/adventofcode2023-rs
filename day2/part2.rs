@@ -21,12 +21,10 @@ fn main() {
                 let count = caps.get(1).unwrap().as_str().parse::<u32>().unwrap();
                 let color = caps.get(2).unwrap().as_str();
 
-                // println!("{}: {}", color, count);
                 let curr = max_fetch.get_mut(color).unwrap();
                 if *curr < count {
                     *curr = count;
                 }
-                // println!("{}: {}", color, curr);
             }
         }
         max_fetch.iter().for_each(|(_, v)| {
